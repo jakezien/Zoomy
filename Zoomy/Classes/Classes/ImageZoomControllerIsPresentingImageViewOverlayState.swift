@@ -226,7 +226,8 @@ private extension ImageZoomControllerIsPresentingImageViewOverlayState {
                 let contentOffsetCorrectionDueToZoomDifference = contentOffsetCorrectionDueToZoomDifference,
                 let image = owner.imageView?.image else { return CGRect.zero }
         
-        let contentOffsetCorrectionDueToScrollView = owner.contentOffsetCorrection(on: neededContentOffSet)
+        let contentOffsetCorrectionDueToScrollView = CGPoint.zero
+//        let contentOffsetCorrectionDueToScrollView = owner.contentOffsetCorrection(on: neededContentOffSet)
         expectedFrameOfScrollableImageView = CGRect(x: fromFrame.origin.x + contentOffsetCorrectionDueToScrollView.x + contentOffsetCorrectionDueToZoomDifference.x,
                                                     y: fromFrame.origin.y + contentOffsetCorrectionDueToScrollView.y + contentOffsetCorrectionDueToZoomDifference.y,
                                                     width: owner.size(of: image, at: owner.scrollView.zoomScale).width,
@@ -249,7 +250,6 @@ private extension ImageZoomControllerIsPresentingImageViewOverlayState {
         guard   let owner = owner,
                 let expectedFrameOfScrollableImageView = expectedFrameOfScrollableImageView,
                 let neededContentMode = owner.imageView?.contentMode else { return }
-        
         owner.scrollView.pinchGestureRecognizer?.isEnabled = false
         hideScrollableImageViewWhileKeepingItUserInteractable()
 
