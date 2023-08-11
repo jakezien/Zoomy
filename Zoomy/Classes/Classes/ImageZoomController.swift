@@ -296,8 +296,9 @@ internal extension ImageZoomController {
         } else {
             y = 0
         }
-        
-        return CGPoint(x: x, y: y)
+        let returnVal = CGPoint(x: x, y: y)
+        print("\(type(of: self)) :: \(#function) :: in:\(contentOffset) out:\(returnVal)")
+        return returnVal
     }
     
     /// Returns what the provided contentOffset will turn into when applied on the scrollView

@@ -25,7 +25,9 @@ internal class ImageZoomControllerIsPresentingImageViewOverlayState {
         }
     }
     
-    private lazy var fromFrame: CGRect = owner?.overlayImageView.frame ?? CGRect.zero
+    private lazy var fromFrame: CGRect = owner?.overlayImageView.frame ?? CGRect.zero {didSet{
+        print("\(type(of: self)) :: \(#function) :: \(fromFrame)")
+    }}
     
     private var neededContentOffSet: CGPoint?
     private var contentOffsetCorrectionDueToZoomDifference: CGPoint?
@@ -225,13 +227,17 @@ private extension ImageZoomControllerIsPresentingImageViewOverlayState {
                 let neededContentOffSet = neededContentOffSet,
                 let contentOffsetCorrectionDueToZoomDifference = contentOffsetCorrectionDueToZoomDifference,
                 let image = owner.imageView?.image else { return CGRect.zero }
+        let contentOffsetCorrectionDueToScrollView = owner.contentOffsetCorrection(on: neededContentOffSet)
         
-        let contentOffsetCorrectionDueToScrollView = CGPoint.zero
-//        let contentOffsetCorrectionDueToScrollView = owner.contentOffsetCorrection(on: neededContentOffSet)
-        expectedFrameOfScrollableImageView = CGRect(x: fromFrame.origin.x + contentOffsetCorrectionDueToScrollView.x + contentOffsetCorrectionDueToZoomDifference.x,
-                                                    y: fromFrame.origin.y + contentOffsetCorrectionDueToScrollView.y + contentOffsetCorrectionDueToZoomDifference.y,
-                                                    width: owner.size(of: image, at: owner.scrollView.zoomScale).width,
-                                                    height: owner.size(of: image, at: owner.scrollView.zoomScale).height)
+
+        expectedFrameOfScrollableImageView = CGRect(
+//            x: fromFrame.origin.x + contentOffsetCorrectionDueToScrollView.x + contentOffsetCorrectionDueToZoomDifference.x,
+            x: fromFrame.origin.x +  contentOffsetCorrectionDueToZoomDifference.x,
+//            y: fromFrame.origin.y + contentOffsetCorrectionDueToScrollView.y + contentOffsetCorrectionDueToZoomDifference.y,
+            y: fromFrame.origin.y +  contentOffsetCorrectionDueToZoomDifference.y,
+            width: owner.size(of: image, at: owner.scrollView.zoomScale).width,
+            height: owner.size(of: image, at: owner.scrollView.zoomScale).height
+        )
         
         return expectedFrameOfScrollableImageView ?? CGRect.zero
     }
